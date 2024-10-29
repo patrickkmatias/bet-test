@@ -1,0 +1,12 @@
+services:
+    database:
+        image: postgres
+        container_name: database
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: pswd
+            POSTGRES_DB: bet_db
+        ports:
+            - 5432:5432
+        volumes:
+            - /dbdata:/var/lib/postgresql/data
