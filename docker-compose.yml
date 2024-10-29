@@ -1,23 +1,4 @@
 services:
-    laravel:
-        container_name: laravel
-        build: docker/laravel
-        command: php artisan serve --host=0.0.0.0
-        volumes:
-            - .:/app
-        ports:
-            - 8000:8000
-        depends_on:
-            database:
-                condition: service_started
-    vite:
-        container_name: vite
-        build: docker/vite
-        command: npm run dev.host
-        volumes:
-            - .:/app
-        ports:
-            - 5173:5173
     database:
         image: postgres
         container_name: database
@@ -28,4 +9,4 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - ./docker/db:/var/lib/postgresql/data
+            - /dbdata:/var/lib/postgresql/data
