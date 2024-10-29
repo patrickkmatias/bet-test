@@ -21,6 +21,11 @@ class UpdateAffiliateRequest extends FormRequest
             'affiliate.cpf' => ['nullable', 'string', new ValidCpf],
             'affiliate.phone_number' => ['nullable', 'string'],
             'affiliate.active' => ['nullable', 'boolean'],
+
+            'address' => ['nullable', 'array'],
+            'address.city' => ['nullable', 'string'],
+            'address.state' => ['nullable', 'string'],
+            'address.street' => ['nullable', 'string'],
         ];
     }
 }

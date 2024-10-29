@@ -24,6 +24,11 @@ class Affiliate extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
+
     public function activate()
     {
         $this->update(['active' => true]);

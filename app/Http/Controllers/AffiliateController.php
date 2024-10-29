@@ -27,7 +27,8 @@ class AffiliateController extends Controller
     {
         $input = $request->all();
 
-        Affiliate::create($input['affiliate']);
+        $affiliate = Affiliate::create($input['affiliate']);
+        $affiliate->address()->create($input['address']);
 
         return to_route('affiliate.index');
     }
@@ -40,6 +41,7 @@ class AffiliateController extends Controller
         $input = $request->all();
 
         $affiliate->update($input['affiliate']);
+        $affiliate->address()->update($input['address']);
 
         return to_route('affiliate.index');
     }

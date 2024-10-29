@@ -21,6 +21,11 @@ class StoreAffiliateRequest extends FormRequest
             'affiliate.cpf' => ['required', 'string', new ValidCpf],
             'affiliate.phone_number' => ['required', 'string'],
             'affiliate.active' => ['nullable', 'boolean'],
+
+            'address' => ['required', 'array'],
+            'address.city' => ['required', 'string'],
+            'address.state' => ['required', 'string'],
+            'address.street' => ['required', 'string'],
         ];
     }
 }
