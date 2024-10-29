@@ -33,19 +33,15 @@ class AffiliateController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Affiliate $affiliate)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateAffiliateRequest $request, Affiliate $affiliate)
     {
-        //
+        $input = $request->all();
+
+        $affiliate->update($input['affiliate']);
+
+        return to_route('affiliate.index');
     }
 
     /**

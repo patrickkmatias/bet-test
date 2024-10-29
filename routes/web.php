@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(AffiliateController::class)->group(function() {
         Route::get('/affiliates', 'index')->name('affiliate.index');
         Route::post('/affiliates', 'store')->name('affiliate.store');
+        Route::patch('/affiliates/{affiliate}', 'update')->name('affiliate.update');
     });
 });
 
