@@ -40,4 +40,24 @@ class UpdateAffiliateTest extends InertiaTestCase
         $this->assertEquals($data['affiliate']['birthdate'], $a->birthdate);
         $this->assertEquals($data['affiliate']['phone_number'], $a->phone_number);
     }
+
+    public function test_affiliate_can_toggle_activation(): void
+    {
+        $data = [
+            'affiliate' => [
+                'active' => false
+            ]
+        ];
+
+        $this->actingAs($this->user)->patch($this->path, $data);
+        $a = Affiliate::where('user_id', $this->user->id)->first();
+        $this->assertFalse($a['active']);
+
+
+
+        $data['affiliate']['active'] = true;
+        $this->actingAs($this->user)->patch($this->path, $data);
+        $a->refresh();
+        $this->assertTrue($a['active']);
+    }
 }

@@ -16,9 +16,31 @@ class Affiliate extends Model
         'birthdate',
         'cpf',
         'phone_number',
+        'active'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
+    }
+
+    public function activate()
+    {
+        $this->update(['active' => true]);
+    }
+
+    public function inactivate()
+    {
+        $this->update(['active' => false]);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('active', false);
     }
 }

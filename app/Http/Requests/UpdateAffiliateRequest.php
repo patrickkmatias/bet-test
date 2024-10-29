@@ -20,6 +20,7 @@ class UpdateAffiliateRequest extends FormRequest
             'affiliate.birthdate' => ['nullable', 'date'],
             'affiliate.cpf' => ['nullable', 'string', new ValidCpf],
             'affiliate.phone_number' => ['nullable', 'string'],
+            'affiliate.active' => ['nullable', 'boolean'],
         ];
     }
 }

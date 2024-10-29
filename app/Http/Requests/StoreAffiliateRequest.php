@@ -20,6 +20,7 @@ class StoreAffiliateRequest extends FormRequest
             'affiliate.birthdate' => ['required', 'date'],
             'affiliate.cpf' => ['required', 'string', new ValidCpf],
             'affiliate.phone_number' => ['required', 'string'],
+            'affiliate.active' => ['nullable', 'boolean'],
         ];
     }
 }
