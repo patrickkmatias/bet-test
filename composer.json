@@ -35,6 +35,9 @@
         }
     },
     "scripts": {
+        "filter-test": [
+            "vendor/bin/phpunit --filter"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
