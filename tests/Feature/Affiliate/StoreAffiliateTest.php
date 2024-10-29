@@ -27,16 +27,16 @@ class StoreAffiliateTest extends InertiaTestCase
             'affiliate' => [
                 'user_id' => $this->user->id,
                 'birthdate' => fake()->date(),
-                'cpf' => fake()->cpf(),
+                'cpf' => fake()->unique()->cpf(),
                 'phone_number' => fake()->cellphoneNumber()
             ]
         ];
 
         $response = $this->actingAs($this->user)->post($this->path, $data);
 
-        $response->assertStatus(302);
+        $response->assertRedirect(route('affiliate.index'));
 
-        $a = Affiliate::where('cpf', $data['affiliate']['cpf'])->first();
+        $a = Affiliate::where('user_id', $this->user->id)->first();
 
         $this->assertNotEmpty($a);
     }
