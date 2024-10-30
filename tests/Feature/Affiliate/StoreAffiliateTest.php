@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Affiliate;
 
-use App\Models\Affiliate;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\InertiaTestCase;
@@ -31,6 +30,11 @@ class StoreAffiliateTest extends InertiaTestCase
                 'birthdate' => fake()->date(),
                 'cpf' => fake()->unique()->cpf(),
                 'phone_number' => fake()->cellphoneNumber()
+            ],
+            'address' => [
+                'city' => fake()->city(),
+                'state' => fake()->state(),
+                'street' => fake()->streetAddress(),
             ]
         ];
 
@@ -39,5 +43,6 @@ class StoreAffiliateTest extends InertiaTestCase
         $response->assertRedirect(route('affiliate.index'));
         
         $this->assertDatabaseHas('affiliates', $data['affiliate']);
+        $this->assertDatabaseHas('addresses', $data['address']);
     }
 }

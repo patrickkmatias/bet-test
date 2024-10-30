@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
+use App\Models\Affiliate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,5 +23,12 @@ class AffiliateFactory extends Factory
             'cpf' => fake()->unique()->cpf(),
             'phone_number' => fake()->cellphoneNumber()
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Affiliate $affiliate) {
+            $affiliate->address()->create(Address::factory()->make()->toArray());
+        });
     }
 }

@@ -23,11 +23,18 @@ class UpdateAffiliateTest extends InertiaTestCase
 
     public function test_affiliate_can_be_edited(): void
     {
+        $this->assertNotEmpty($this->user->affiliate);
+
         $data = [
             'affiliate' => [
                 'user_id' => $this->user->id,
                 'birthdate' => fake()->date(),
                 'phone_number' => fake()->cellphoneNumber()
+            ],
+            'address' => [
+                'city' => fake()->city(),
+                'state' => fake()->state(),
+                'street' => fake()->streetAddress(),
             ]
         ];
 
@@ -35,10 +42,8 @@ class UpdateAffiliateTest extends InertiaTestCase
 
         $response->assertRedirect(route('affiliate.index'));
 
-        $a = Affiliate::where('user_id', $this->user->id)->first();
-
-        $this->assertEquals($data['affiliate']['birthdate'], $a->birthdate);
-        $this->assertEquals($data['affiliate']['phone_number'], $a->phone_number);
+        $this->assertDatabaseHas('affiliates', $data['affiliate']);
+        $this->assertDatabaseHas('addresses', $data['address']);
     }
 
     public function test_affiliate_can_toggle_activation(): void
