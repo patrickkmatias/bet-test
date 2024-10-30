@@ -29,6 +29,11 @@ class Affiliate extends Model
         return $this->hasOne(Address::class);
     }
 
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
+
     public function activate()
     {
         $this->update(['active' => true]);
