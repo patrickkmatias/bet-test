@@ -17,12 +17,14 @@ class StoreAffiliateTest extends InertiaTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->hasAffiliate()->create();
+        $this->user = User::factory()->create();
         $this->path = route('affiliate.store');
     }
 
     public function test_affiliate_can_be_created(): void
     {
+        $this->assertEmpty($this->user->affiliate);
+
         $data = [
             'affiliate' => [
                 'user_id' => $this->user->id,
