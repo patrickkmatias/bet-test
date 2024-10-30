@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/affiliates', 'store')->name('affiliate.store');
         Route::patch('/affiliates/{affiliate}', 'update')->name('affiliate.update');
     });
+
+    Route::resource('commissions', CommissionController::class)->only(['index', 'store', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

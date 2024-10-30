@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Affiliate::class);
     }
+
+    public function commissions()
+    {
+        return $this->hasManyThrough(Commission::class, Affiliate::class);
+    }
 }
