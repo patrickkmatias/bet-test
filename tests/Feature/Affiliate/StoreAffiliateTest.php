@@ -37,9 +37,7 @@ class StoreAffiliateTest extends InertiaTestCase
         $response = $this->actingAs($this->user)->post($this->path, $data);
 
         $response->assertRedirect(route('affiliate.index'));
-
-        $a = Affiliate::where('user_id', $this->user->id)->first();
-
-        $this->assertNotEmpty($a);
+        
+        $this->assertDatabaseHas('affiliates', $data['affiliate']);
     }
 }
