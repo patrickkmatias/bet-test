@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\User;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -17,7 +18,9 @@ Route::get('/', function () {
 });
 
 Route::get('/users', function () {
-    return Inertia::render('Users');
+    return Inertia::render('Users', [
+        'users' =>  User::all()
+    ]);
 })->middleware(['auth', 'verified'])->name('users');
 
 Route::middleware('auth')->group(function () {
