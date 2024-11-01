@@ -11,19 +11,17 @@ import {
 } from "@/Components/ui/card";
 
 import { usePage, Head, router } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 defineProps({
     affiliates: Array,
 });
 
-const viewEditForm = ref(false);
-
-const state = ref("idle");
+const showForm = ref(false);
 
 const user = computed(() => usePage().props.auth.user);
 
-const isActive = computed(() => user.value.affiliate.active);
+const affiliate = computed(() => user.value.affiliate);
 
 function toggleAffiliateActivation(id, isActive) {
     router.patch(route("affiliate.update", id), {
@@ -32,6 +30,8 @@ function toggleAffiliateActivation(id, isActive) {
         },
     });
 }
+
+watch(affiliate, () => (showForm.value = false), { deep: true });
 </script>
 <template>
     <Head title="Affiliates" />
@@ -42,32 +42,41 @@ function toggleAffiliateActivation(id, isActive) {
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">
                     Affiliates
                 </h2>
-                <PrimaryButton
-                    v-if="!user.affiliate"
-                    @click="state = 'show_edit_form'"
-                >
-                    {{
-                        state == "show_edit_form"
-                            ? "Close form"
-                            : "Become affiliate"
-                    }}
-                </PrimaryButton>
-                <PrimaryButton
-                    v-if="user.affiliate"
-                    @click="toggleAffiliateActivation(user.affiliate.id, user.affiliate.active)"
-                >
-                    {{ isActive ? "in" : "" }}activate affiliation
-                </PrimaryButton>
+                <span class="flex gap-4">
+                    <PrimaryButton @click="showForm = !showForm">
+                        {{
+                            showForm
+                                ? "Close form"
+                                : affiliate
+                                ? "Edit affiliate data"
+                                : "Become affiliate"
+                        }}
+                    </PrimaryButton>
+                    <PrimaryButton
+                        v-if="affiliate"
+                        @click="
+                            toggleAffiliateActivation(
+                                affiliate.id,
+                                affiliate.active
+                            )
+                        "
+                    >
+                        {{ affiliate.active ? "in" : "" }}activate affiliation
+                    </PrimaryButton>
+                </span>
             </div>
         </template>
 
         <div class="py-12">
             <div class="grid gap-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    v-if="state == 'show_edit_form' && !user.affiliate"
+                    v-if="showForm"
                     class="p-6 flex flex-wrap overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
-                    <CreateEditAffiliateForm></CreateEditAffiliateForm>
+                    <CreateEditAffiliateForm
+                        :mode="affiliate ? 'edit' : 'create'"
+                        :affiliate_id="affiliate ? affiliate.id : null"
+                    ></CreateEditAffiliateForm>
                 </div>
 
                 <!-- <div class="p-6 flex flex-wrap overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -88,7 +97,12 @@ function toggleAffiliateActivation(id, isActive) {
                             }}</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <PrimaryButton title="Inactivate affiliate" @click="toggleAffiliateActivation(a.id, a.active)">
+                            <PrimaryButton
+                                title="Inactivate affiliate"
+                                @click="
+                                    toggleAffiliateActivation(a.id, a.active)
+                                "
+                            >
                                 <span class="material-symbols-outlined">
                                     expand_circle_down
                                 </span>

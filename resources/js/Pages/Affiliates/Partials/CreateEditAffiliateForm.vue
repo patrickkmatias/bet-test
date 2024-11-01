@@ -17,21 +17,30 @@ import {
 import { useForm, usePage, router } from "@inertiajs/vue3";
 import { ref, onMounted, watch, computed } from "vue";
 
+const props = defineProps({
+    mode: String,
+    affiliate_id: Number
+});
+
 const user = computed(() => usePage().props.auth.user);
 
 const form = useForm({
     affiliate: {
         user_id: user.value.id,
-        birthdate: "",
-        cpf: "",
-        phone_number: "",
+        birthdate: null,
+        cpf: null,
+        phone_number: null,
     },
     address: {
-        state: "",
-        city: "",
-        street: "",
+        state: null,
+        city: null,
+        street: null,
     },
 });
+
+function removeNullEntries(obj) {
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== null))
+}
 
 const selectedState = computed(() => form.address.state);
 
@@ -69,11 +78,21 @@ async function fetchCities() {
 onMounted(fetchStates);
 
 watch(selectedState, fetchCities);
+
+function submit() {
+    if (props.mode == "create") 
+        form.post(route('affiliate.store'))
+    else {
+        form.affiliate = removeNullEntries(form.affiliate)
+        form.address = removeNullEntries(form.address)
+        form.patch(route('affiliate.update', props.affiliate_id), )
+    }
+}
 </script>
 
 <template>
     <form
-        @submit.prevent="form.post(route('affiliate.store'))"
+        @submit.prevent="submit()"
         class="w-full gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
     >
         <div class="grid gap-1">
@@ -84,7 +103,7 @@ watch(selectedState, fetchCities);
                 type="text"
                 class="px-2 h-8 mt-1 block w-full"
                 v-model="form.affiliate.cpf"
-                required
+                :required="mode == 'create'"
                 pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
                 placeholer="123.456.789-00"
                 autofocus
@@ -101,7 +120,7 @@ watch(selectedState, fetchCities);
                 class="px-2 h-8 mt-1 block w-full"
                 maxlength="10"
                 v-model="form.affiliate.birthdate"
-                required
+                :required="mode == 'create'"
                 pattern="\d{2}/\d{2}/\d{4}"
             />
         </div>
@@ -116,14 +135,14 @@ watch(selectedState, fetchCities);
                 maxlength="15"
                 class="px-2 h-8 mt-1 block w-full"
                 v-model="form.affiliate.phone_number"
-                required
+                :required="mode == 'create'"
             />
         </div>
 
         <div class="grid gap-1">
             <InputLabel for="state" value="State" />
 
-            <Select id="state" v-model="form.address.state" required>
+            <Select id="state" v-model="form.address.state" :required="mode == 'create'">
                 <SelectTrigger class="w-[180px]">
                     <SelectValue placeholder="Select a state" />
                 </SelectTrigger>
@@ -144,7 +163,7 @@ watch(selectedState, fetchCities);
         <div class="grid gap-1">
             <InputLabel for="city" value="City" />
 
-            <Select id="city" v-model="form.address.city" required>
+            <Select id="city" v-model="form.address.city" :required="mode == 'create'">
                 <SelectTrigger class="w-[180px]">
                     <SelectValue placeholder="Select a city" />
                 </SelectTrigger>
@@ -170,7 +189,7 @@ watch(selectedState, fetchCities);
                 type="text"
                 class="px-2 h-8 mt-1 block w-full"
                 v-model="form.address.street"
-                required
+                :required="mode == 'create'"
             />
         </div>
 
