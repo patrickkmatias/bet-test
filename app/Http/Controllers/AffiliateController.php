@@ -14,7 +14,7 @@ class AffiliateController extends Controller
      */
     public function index()
     {
-        $affiliates = Affiliate::with('user')->get();
+        $affiliates = Affiliate::with('user')->where('active', true)->get();
         return Inertia::render('Affiliates/Index', [
             'affiliates' => $affiliates
         ]);
@@ -40,8 +40,11 @@ class AffiliateController extends Controller
     {
         $input = $request->all();
 
-        $affiliate->update($input['affiliate']);
-        $affiliate->address()->update($input['address']);
+        if (!empty($input['affiliate'])) 
+            $affiliate->update($input['affiliate']);
+
+        if (!empty($input['address'])) 
+            $affiliate->address()->update($input['address']);
 
         return to_route('affiliate.index');
     }
