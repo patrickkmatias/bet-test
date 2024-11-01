@@ -7,6 +7,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
+    CardContent,
 } from "@/Components/ui/card";
 
 import { usePage, Head, router } from "@inertiajs/vue3";
@@ -86,6 +87,13 @@ function toggleAffiliateActivation(id, isActive) {
                                 a.phone_number
                             }}</CardDescription>
                         </CardHeader>
+                        <CardContent>
+                            <PrimaryButton title="Inactivate affiliate" @click="toggleAffiliateActivation(a.id, a.active)">
+                                <span class="material-symbols-outlined">
+                                    expand_circle_down
+                                </span>
+                            </PrimaryButton>
+                        </CardContent>
                     </Card>
                 </div>
             </div>
