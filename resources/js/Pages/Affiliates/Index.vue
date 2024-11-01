@@ -2,7 +2,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import CreateEditAffiliateForm from "./Partials/CreateEditAffiliateForm.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { Head } from "@inertiajs/vue3";
 import {
     Card,
     CardDescription,
@@ -10,7 +9,7 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Head, router } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 
 defineProps({
@@ -19,7 +18,19 @@ defineProps({
 
 const viewEditForm = ref(false);
 
+const state = ref("idle");
+
 const user = computed(() => usePage().props.auth.user);
+
+const isActive = computed(() => user.value.affiliate.active);
+
+function toggleAffiliateActivation(id, isActive) {
+    router.patch(route("affiliate.update", id), {
+        affiliate: {
+            active: !isActive,
+        },
+    });
+}
 </script>
 <template>
     <Head title="Affiliates" />
@@ -32,9 +43,19 @@ const user = computed(() => usePage().props.auth.user);
                 </h2>
                 <PrimaryButton
                     v-if="!user.affiliate"
-                    @click="viewEditForm = !viewEditForm"
+                    @click="state = 'show_edit_form'"
                 >
-                    {{ viewEditForm ? "Close form" : "Become affiliate" }}
+                    {{
+                        state == "show_edit_form"
+                            ? "Close form"
+                            : "Become affiliate"
+                    }}
+                </PrimaryButton>
+                <PrimaryButton
+                    v-if="user.affiliate"
+                    @click="toggleAffiliateActivation(user.affiliate.id, user.affiliate.active)"
+                >
+                    {{ isActive ? "in" : "" }}activate affiliation
                 </PrimaryButton>
             </div>
         </template>
@@ -42,7 +63,7 @@ const user = computed(() => usePage().props.auth.user);
         <div class="py-12">
             <div class="grid gap-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    v-if="viewEditForm && !user.affiliate"
+                    v-if="state == 'show_edit_form' && !user.affiliate"
                     class="p-6 flex flex-wrap overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <CreateEditAffiliateForm></CreateEditAffiliateForm>
