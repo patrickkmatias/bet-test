@@ -39,6 +39,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Users
                                 </NavLink>
+                                <NavLink
+                                    :href="route('affiliate.index')"
+                                    :active="route().current('affiliate.index')"
+                                >
+                                    Affiliates
+                                </NavLink>
                             </div>
                         </div>
 

@@ -14,7 +14,7 @@ class AffiliateController extends Controller
      */
     public function index()
     {
-        $affiliates = Affiliate::all();
+        $affiliates = Affiliate::with('user')->get();
         return Inertia::render('Affiliates/Index', [
             'affiliates' => $affiliates
         ]);
