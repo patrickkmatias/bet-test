@@ -13,16 +13,21 @@ docker compose up -d
 ```sh
 npm run init
 ```
-3. If the seeding was successful, you will be able to access the system with these default credentials:
+3. Now you can start the development server, starting the Vite's resources server and also Laravel's server:
+
+```sh
+npm run dev
+
+# In a new bash:
+php artisan serve
+``` 
+
+If the seeding was successful, you will be able to access the system with these default credentials:
 ```
 Email: test@example.com
 Password: password
 ```
 - The project is covered by tests; they can be executed using `php artisan test`
-
-## 👨🏾‍💻 Comments
-
-I didn't have spare time to even start the project, so all what I could develop is from about 12h~24h from now. Hope you enjoy it =)
 
 <details>
 <summary><h2> 🎆 Other </h2></summary>
