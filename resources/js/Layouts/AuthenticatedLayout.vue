@@ -48,7 +48,7 @@ const user = computed(() => usePage().props.auth.user);
                                     Affiliates
                                 </NavLink>
                                 <NavLink
-                                    v-if="user.affiliate.active"
+                                    v-if="user.affiliate && user.affiliate.active"
                                     :href="route('commissions.index')"
                                     :active="route().current('commissions.index')"
                                 >
